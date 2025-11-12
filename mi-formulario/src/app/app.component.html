@@ -1,0 +1,137 @@
+
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <h1>Formulario de Contacto Seguro</h1>
+      <p>Completa todos los campos para enviarnos tu mensaje</p>
+    </div>
+
+    <!-- Alert -->
+    <div *ngIf="submitStatus" [class]="'alert alert-' + submitStatus.type">
+      <span class="alert-icon">{{ submitStatus.type === 'success' ? '✓' : '⚠' }}</span>
+      <span>{{ submitStatus.message }}</span>
+    </div>
+
+    <!-- Formulario -->
+    <div [formGroup]="contactForm" class="form">
+
+      <!-- Nombre -->
+      <div class="form-group">
+        <label for="name" class="label">Nombre completo *</label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          [class]="getFieldClass('name')"
+          placeholder="Ej: Juan Pérez"
+          maxlength="100"
+        />
+        <p *ngIf="hasError('name')" class="error-text">
+          ⚠ {{ getErrorMessage('name') }}
+        </p>
+      </div>
+
+      <!-- Email y Teléfono -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email" class="label">Email *</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            [class]="getFieldClass('email')"
+            placeholder="tu@email.com"
+            maxlength="100"
+          />
+          <p *ngIf="hasError('email')" class="error-text">
+            ⚠ {{ getErrorMessage('email') }}
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="label">Teléfono *</label>
+          <input
+            type="tel"
+            id="phone"
+            formControlName="phone"
+            [class]="getFieldClass('phone')"
+            placeholder="+52 123 456 7890"
+            maxlength="20"
+          />
+          <p *ngIf="hasError('phone')" class="error-text">
+            ⚠ {{ getErrorMessage('phone') }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Asunto -->
+      <div class="form-group">
+        <label for="subject" class="label">Asunto *</label>
+        <input
+          type="text"
+          id="subject"
+          formControlName="subject"
+          [class]="getFieldClass('subject')"
+          placeholder="Ej: Consulta sobre servicios"
+          maxlength="200"
+        />
+        <p *ngIf="hasError('subject')" class="error-text">
+          ⚠ {{ getErrorMessage('subject') }}
+        </p>
+      </div>
+
+      <!-- Mensaje -->
+      <div class="form-group">
+        <label for="message" class="label">Mensaje *</label>
+        <textarea
+          id="message"
+          formControlName="message"
+          [class]="getFieldClass('message')"
+          placeholder="Escribe tu mensaje aquí..."
+          rows="5"
+          maxlength="1000"
+        ></textarea>
+        <div class="char-counter">
+          <p *ngIf="hasError('message')" class="error-text">
+            ⚠ {{ getErrorMessage('message') }}
+          </p>
+          <span *ngIf="!hasError('message')" class="char-count">
+            {{ getCharCount() }}
+          </span>
+        </div>
+      </div>
+
+      <!-- reCAPTCHA -->
+      <div class="recaptcha-wrapper">
+        <div
+          class="g-recaptcha"
+          [attr.data-sitekey]="recaptchaSiteKey"
+          data-callback="onRecaptchaSuccess"
+          data-expired-callback="onRecaptchaExpired"
+        ></div>
+        <p *ngIf="recaptchaError" class="error-text center">
+          ⚠ {{ recaptchaError }}
+        </p>
+        <p class="recaptcha-note">Protegido por reCAPTCHA v2</p>
+      </div>
+
+      <!-- Botón de envío -->
+      <button
+        type="button"
+        (click)="onSubmit()"
+        [disabled]="isSubmitting"
+        class="submit-btn"
+        [class.loading]="isSubmitting"
+      >
+        <span *ngIf="isSubmitting" class="spinner">⏳</span>
+        <span>{{ isSubmitting ? 'Enviando...' : 'Enviar Formulario' }}</span>
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>🔒 Tus datos están protegidos y serán tratados de forma confidencial</p>
+    </div>
+  </div>
+</div>
